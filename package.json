@@ -1,0 +1,15 @@
+{
+  "name": "zia-traders-co",
+  "version": "1.0.0",
+  "description": "Zia Traders & Co. — Production-Ready E-Commerce Platform",
+  "scripts": {
+    "install-all": "cd backend && npm install && cd ../frontend && npm install",
+    "seed": "cd backend && npm run seed",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "author": "AgroMart Pro",
+  "license": "MIT"
+}
