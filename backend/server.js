@@ -13,10 +13,31 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+// ─── ALLOWED ORIGINS ───────────────────────────────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'https://ziatraders-swo3.onrender.com',
+  'https://ziatradersandco-i0rt.onrender.com',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS blocked: ${origin}`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -25,15 +46,13 @@ const io = new Server(server, {
 // Make io available in routes
 app.set('io', io);
 
-// Middleware
+// ─── MIDDLEWARE ────────────────────────────────────────────────────────────────
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight requests
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 app.use(morgan('dev'));
-app.use(cors({
-  origin:'https://ziatraders-swo3.onrender.com',
-  credentials: true,
-}));
 
 // Static files for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -93,9 +112,14 @@ app.use('/api/finance',       financeRoutes);
 app.use('/api/logistics',     logisticsRoutes);
 app.use('/api/inventory',     inventoryRoutes);
 
-// Health check
+// ─── HEALTH CHECK ──────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Zia Traders & Co. API is running', timestamp: new Date() });
+});
+
+// ─── 404 HANDLER for unknown API routes ────────────────────────────────────────
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` });
 });
 
 // ─── SOCKET.IO EVENTS ──────────────────────────────────────────────────────────
