@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://ziatraders-swo3.onrender.com',
+  // Fixed: Added '/api' suffix to the backend URL fallback
+  baseURL: process.env.REACT_APP_API_URL || 'https://onrender.com',
   withCredentials: true,
 });
 
@@ -136,21 +137,21 @@ export const warehouseAPI = {
   getAll: () => API.get('/warehouses'),
   create: (d) => API.post('/warehouses', d),
   update: (id, d) => API.put(`/warehouses/${id}`, d),
-  delete: (id) => API.delete(`/warehouses/${id}`),
+  delete: (id) => API.delete('/warehouses/${id}`),
 };
 
 export const staffAPI = {
   getAll: () => API.get('/staff'),
   create: (d) => API.post('/staff', d),
   update: (id, d) => API.put(`/staff/${id}`, d),
-  delete: (id) => API.delete(`/staff/${id}`),
+  delete: (id) => API.delete('/staff/${id}`),
 };
 
 export const expenseAPI = {
   getAll: () => API.get('/expenses'),
   create: (d) => API.post('/expenses', d),
   update: (id, d) => API.put(`/expenses/${id}`, d),
-  delete: (id) => API.delete(`/expenses/${id}`),
+  delete: (id) => API.delete('/expenses/${id}`),
 };
 
 export const financeAPI = {
@@ -158,7 +159,7 @@ export const financeAPI = {
   getAll: () => API.get('/finance'),
   create: (d) => API.post('/finance', d),
   update: (id, d) => API.put(`/finance/${id}`, d),
-  delete: (id) => API.delete(`/finance/${id}`),
+  delete: (id) => API.delete('/finance/${id}`),
 };
 
 export const logisticsAPI = {
@@ -166,7 +167,7 @@ export const logisticsAPI = {
   create: (d) => API.post('/logistics', d),
   update: (id, d) => API.put(`/logistics/${id}`, d),
   updateStatus: (id, d) => API.put(`/logistics/${id}/status`, d),
-  delete: (id) => API.delete(`/logistics/${id}`),
+  delete: (id) => API.delete('/logistics/${id}`),
 };
 
 export const inventoryAPI = {
