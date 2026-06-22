@@ -39,9 +39,7 @@ export default function Login() {
         </form>
         <p className="text-center mt-3 text-muted">Don't have an account? <Link to="/register" style={{ color: 'var(--green-700)', fontWeight: 600 }}>Register here</Link></p>
         <div className="divider" />
-        <p className="text-center" style={{ fontSize: '0.75rem', color: 'var(--gray-500)' }}>
-          Demo: admin@ziatraders.pk / 123456 | customer@ziatraders.pk / 123456
-        </p>
+       
       </div>
     </div>
   );

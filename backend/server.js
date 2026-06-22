@@ -112,44 +112,7 @@ app.use('/api/finance',       financeRoutes);
 app.use('/api/logistics',     logisticsRoutes);
 app.use('/api/inventory',     inventoryRoutes);
 
-// TEMPORARY SEED ROUTE - remove after use
-app.get('/api/seed-admin', async (req, res) => {
-  try {
-    const User = require('./models/User');
-    const bcrypt = require('bcryptjs');
 
-    // Delete old demo accounts if any
-    await User.deleteMany({ email: { $in: [
-      'admin@agromart.pk',
-      'seller@agromart.pk',
-      'customer@agromart.pk',
-      'agronomist@agromart.pk',
-      'admin@ziatraders.pk',
-      'seller@ziatraders.pk',
-    ]}});
-
-    // Create fresh demo accounts
-    await User.create([
-      { name: 'Super Admin',     email: 'admin@ziatraders.pk',      password: '123456', role: 'admin',      isEmailVerified: true },
-      { name: 'Demo Seller',     email: 'seller@ziatraders.pk',     password: '123456', role: 'seller',     isEmailVerified: true },
-      { name: 'Demo Customer',   email: 'customer@ziatraders.pk',   password: '123456', role: 'customer',   isEmailVerified: true },
-      { name: 'Dr. Agro Expert', email: 'agronomist@ziatraders.pk', password: '123456', role: 'agronomist', isEmailVerified: true },
-    ]);
-
-    res.json({
-      success: true,
-      message: '✅ Demo accounts created!',
-      accounts: [
-        { role: 'admin',      email: 'admin@ziatraders.pk',      password: '123456' },
-        { role: 'seller',     email: 'seller@ziatraders.pk',     password: '123456' },
-        { role: 'customer',   email: 'customer@ziatraders.pk',   password: '123456' },
-        { role: 'agronomist', email: 'agronomist@ziatraders.pk', password: '123456' },
-      ]
-    });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
 // ─── HEALTH CHECK ──────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Zia Traders & Co. API is running', timestamp: new Date() });
